@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>new (TableWindow)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File table.rb, line 13</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">app</span>)
+        <span class="ruby-comment cmt"># Call the base class initializer first</span>
+        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">app</span>, <span class="ruby-value str">&quot;Sudoku Solver&quot;</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-constant">DECOR_ALL</span>, <span class="ruby-value">0</span>, <span class="ruby-value">0</span>, <span class="ruby-value">0</span>, <span class="ruby-value">0</span>)
+
+        <span class="ruby-comment cmt"># Tooltip</span>
+        <span class="ruby-identifier">tooltip</span> = <span class="ruby-constant">FXToolTip</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">getApp</span>())
+
+        <span class="ruby-comment cmt"># Menubar</span>
+        <span class="ruby-identifier">menubar</span> = <span class="ruby-constant">FXMenuBar</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-constant">LAYOUT_SIDE_TOP</span><span class="ruby-operator">|</span><span class="ruby-constant">LAYOUT_FILL_X</span>)
+
+
+        <span class="ruby-comment cmt"># Separator</span>
+        <span class="ruby-constant">FXHorizontalSeparator</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-constant">LAYOUT_SIDE_TOP</span><span class="ruby-operator">|</span><span class="ruby-constant">LAYOUT_FILL_X</span><span class="ruby-operator">|</span><span class="ruby-constant">SEPARATOR_GROOVE</span>)
+
+        <span class="ruby-comment cmt"># Contents</span>
+        <span class="ruby-identifier">contents</span> = <span class="ruby-constant">FXVerticalFrame</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-constant">LAYOUT_SIDE_TOP</span><span class="ruby-operator">|</span><span class="ruby-constant">FRAME_NONE</span><span class="ruby-operator">|</span><span class="ruby-constant">LAYOUT_FILL_X</span><span class="ruby-operator">|</span><span class="ruby-constant">LAYOUT_FILL_Y</span>)
+
+        <span class="ruby-identifier">frame</span> = <span class="ruby-constant">FXVerticalFrame</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">contents</span>,
+            <span class="ruby-constant">FRAME_SUNKEN</span><span class="ruby-operator">|</span><span class="ruby-constant">FRAME_THICK</span><span class="ruby-operator">|</span><span class="ruby-constant">LAYOUT_FILL_X</span><span class="ruby-operator">|</span><span class="ruby-constant">LAYOUT_FILL_Y</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">padLeft</span> = <span class="ruby-value">0</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">padRight</span> = <span class="ruby-value">0</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">padTop</span> = <span class="ruby-value">0</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">padBottom</span> = <span class="ruby-value">0</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-comment cmt"># Table</span>
+        <span class="ruby-ivar">@table</span> = <span class="ruby-constant">FXTable</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">frame</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-value">0</span>,
+        <span class="ruby-constant">TABLE_NO_COLSELECT</span><span class="ruby-operator">|</span><span class="ruby-constant">TABLE_NO_ROWSELECT</span><span class="ruby-operator">|</span><span class="ruby-constant">LAYOUT_FILL_X</span><span class="ruby-operator">|</span><span class="ruby-constant">LAYOUT_FILL_Y</span><span class="ruby-operator">|</span><span class="ruby-constant">HSCROLLER_NEVER</span><span class="ruby-operator">|</span><span class="ruby-constant">VSCROLLER_NEVER</span>)
+        <span class="ruby-comment cmt">#0,0,0,0, 2,2,2,2)</span>
+
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">font</span> = <span class="ruby-constant">FXFont</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">getApp</span>(), <span class="ruby-value str">&quot;arial&quot;</span>, <span class="ruby-value">12</span>, <span class="ruby-constant">FONTWEIGHT_BOLD</span>,
+            <span class="ruby-constant">FONTSLANT_REGULAR</span>, <span class="ruby-constant">FONTENCODING_DEFAULT</span>)
+
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">visibleRows</span> = <span class="ruby-value">9</span>
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">visibleColumns</span> = <span class="ruby-value">9</span>
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">selBackColor</span> = <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">backColor</span>
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">selTextColor</span> = <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">textColor</span>
+
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">columnHeaderHeight</span> = <span class="ruby-value">0</span>
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">rowHeaderWidth</span> = <span class="ruby-value">0</span>
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">defColumnWidth</span> = <span class="ruby-value">30</span>
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">showVertGrid</span>(<span class="ruby-keyword kw">true</span>)
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">showHorzGrid</span>(<span class="ruby-keyword kw">true</span>)
+
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">setTableSize</span>(<span class="ruby-value">9</span>, <span class="ruby-value">9</span>)
+
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">setBackColor</span>(<span class="ruby-constant">FXRGB</span>(<span class="ruby-value">255</span>, <span class="ruby-value">255</span>, <span class="ruby-value">255</span>))
+        <span class="ruby-comment cmt">#@table.setCellColor(0, 0, FXRGB(255, 255, 255))</span>
+        <span class="ruby-comment cmt">#@table.setCellColor(0, 1, FXRGB(255, 220, 220))</span>
+        <span class="ruby-comment cmt">#@table.setCellColor(1, 0, FXRGB(220, 255, 220))</span>
+        <span class="ruby-comment cmt">#@table.setCellColor(1, 1, FXRGB(220, 220, 255))</span>
+
+        <span class="ruby-comment cmt"># Initialize the scrollable part of the table</span>
+        (<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">8</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+            (<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">8</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+                <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">setItemText</span>(<span class="ruby-identifier">r</span>, <span class="ruby-identifier">c</span>, <span class="ruby-value str">&quot;&quot;</span>)
+                <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">setItemJustify</span>(<span class="ruby-identifier">r</span>, <span class="ruby-identifier">c</span>, <span class="ruby-constant">FXTableItem</span><span class="ruby-operator">::</span><span class="ruby-constant">CENTER_X</span> <span class="ruby-operator">|</span> <span class="ruby-constant">FXTableItem</span><span class="ruby-operator">::</span><span class="ruby-constant">CENTER_Y</span>)
+                <span class="ruby-identifier">bstyle</span> = <span class="ruby-value">0</span>
+                <span class="ruby-identifier">bstyle</span> <span class="ruby-operator">|=</span> <span class="ruby-constant">FXTableItem</span><span class="ruby-operator">::</span><span class="ruby-constant">TBORDER</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">r</span> <span class="ruby-operator">%</span> <span class="ruby-value">3</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+                <span class="ruby-identifier">bstyle</span> <span class="ruby-operator">|=</span> <span class="ruby-constant">FXTableItem</span><span class="ruby-operator">::</span><span class="ruby-constant">BBORDER</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">r</span> <span class="ruby-operator">%</span> <span class="ruby-value">3</span> <span class="ruby-operator">==</span> <span class="ruby-value">2</span>
+                <span class="ruby-identifier">bstyle</span> <span class="ruby-operator">|=</span> <span class="ruby-constant">FXTableItem</span><span class="ruby-operator">::</span><span class="ruby-constant">LBORDER</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span> <span class="ruby-operator">%</span> <span class="ruby-value">3</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+                <span class="ruby-identifier">bstyle</span> <span class="ruby-operator">|=</span> <span class="ruby-constant">FXTableItem</span><span class="ruby-operator">::</span><span class="ruby-constant">RBORDER</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span> <span class="ruby-operator">%</span> <span class="ruby-value">3</span> <span class="ruby-operator">==</span> <span class="ruby-value">2</span>
+                <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">getItem</span>(<span class="ruby-identifier">r</span>, <span class="ruby-identifier">c</span>).<span class="ruby-identifier">borders</span>= <span class="ruby-identifier">bstyle</span>
+            <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-identifier">statusFrame</span> = <span class="ruby-constant">FXHorizontalFrame</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">contents</span>,
+            <span class="ruby-constant">FRAME_SUNKEN</span><span class="ruby-operator">|</span><span class="ruby-constant">FRAME_THICK</span><span class="ruby-operator">|</span><span class="ruby-constant">LAYOUT_FILL_X</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">padTop</span> = <span class="ruby-value">2</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">padBottom</span> = <span class="ruby-value">2</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-comment cmt">#FXLabel.new(statusFrame, &quot;Status:&quot;, nil, JUSTIFY_LEFT)</span>
+
+        <span class="ruby-ivar">@statusField</span> = <span class="ruby-constant">FXTextField</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">statusFrame</span>, <span class="ruby-value">-1</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-value">0</span>,
+            <span class="ruby-constant">JUSTIFY_LEFT</span><span class="ruby-operator">|</span><span class="ruby-constant">TEXTFIELD_READONLY</span><span class="ruby-operator">|</span><span class="ruby-constant">LAYOUT_FILL_X</span>)
+        <span class="ruby-ivar">@statusField</span>.<span class="ruby-identifier">backColor</span> = <span class="ruby-identifier">statusFrame</span>.<span class="ruby-identifier">backColor</span>
+
+        <span class="ruby-comment cmt">#statusline</span>
+        <span class="ruby-comment cmt">#@statusline = FXStatusLine.new(frame)</span>
+        <span class="ruby-comment cmt">#@statusline.normalText = &quot;Hello&quot;</span>
+
+        <span class="ruby-comment cmt"># File Menu</span>
+        <span class="ruby-identifier">filemenu</span> = <span class="ruby-constant">FXMenuPane</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>)
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">filemenu</span>, <span class="ruby-value str">&quot;Open\tCtl-O&quot;</span>).<span class="ruby-identifier">connect</span>(<span class="ruby-constant">SEL_COMMAND</span>, <span class="ruby-identifier">method</span>(<span class="ruby-identifier">:onCmdOpen</span>))
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">filemenu</span>, <span class="ruby-value str">&quot;Save as...\tCtl-S&quot;</span>).<span class="ruby-identifier">connect</span>(<span class="ruby-constant">SEL_COMMAND</span>, <span class="ruby-identifier">method</span>(<span class="ruby-identifier">:onCmdSaveAs</span>))
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">filemenu</span>, <span class="ruby-value str">&quot;&amp;Quit\tCtl-Q&quot;</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">getApp</span>(), <span class="ruby-constant">FXApp</span><span class="ruby-operator">::</span><span class="ruby-constant">ID_QUIT</span>)
+        <span class="ruby-constant">FXMenuTitle</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">menubar</span>, <span class="ruby-value str">&quot;&amp;File&quot;</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">filemenu</span>)
+
+        <span class="ruby-comment cmt"># Options Menu</span>
+        <span class="ruby-identifier">solvermenu</span> = <span class="ruby-constant">FXMenuPane</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>)
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">solvermenu</span>, <span class="ruby-value str">&quot;Step\tCtl-1&quot;</span>).<span class="ruby-identifier">connect</span>(<span class="ruby-constant">SEL_COMMAND</span>, <span class="ruby-identifier">method</span>(<span class="ruby-identifier">:onCmdStep</span>))
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">solvermenu</span>, <span class="ruby-value str">&quot;Start\tCtl-2&quot;</span>).<span class="ruby-identifier">connect</span>(<span class="ruby-constant">SEL_COMMAND</span>, <span class="ruby-identifier">method</span>(<span class="ruby-identifier">:onCmdStart</span>))
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">solvermenu</span>, <span class="ruby-value str">&quot;Stop\tCtl-3&quot;</span>).<span class="ruby-identifier">connect</span>(<span class="ruby-constant">SEL_COMMAND</span>, <span class="ruby-identifier">method</span>(<span class="ruby-identifier">:onCmdStop</span>))
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">solvermenu</span>, <span class="ruby-value str">&quot;Analyze\tCtl-A&quot;</span>).<span class="ruby-identifier">connect</span>(<span class="ruby-constant">SEL_COMMAND</span>, <span class="ruby-identifier">method</span>(<span class="ruby-identifier">:onCmdAnalyze</span>))
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">solvermenu</span>, <span class="ruby-value str">&quot;Reset\tCtl-R&quot;</span>).<span class="ruby-identifier">connect</span>(<span class="ruby-constant">SEL_COMMAND</span>, <span class="ruby-identifier">method</span>(<span class="ruby-identifier">:onCmdReset</span>))
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">solvermenu</span>, <span class="ruby-value str">&quot;Reload\tCtl-L&quot;</span>).<span class="ruby-identifier">connect</span>(<span class="ruby-constant">SEL_COMMAND</span>, <span class="ruby-identifier">method</span>(<span class="ruby-identifier">:onCmdReload</span>))
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">solvermenu</span>, <span class="ruby-value str">&quot;Set as Problem\tCtl-N&quot;</span>).<span class="ruby-identifier">connect</span>(<span class="ruby-constant">SEL_COMMAND</span>, <span class="ruby-identifier">method</span>(<span class="ruby-identifier">:onCmdSetAsProblem</span>))
+        <span class="ruby-constant">FXMenuCommand</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">solvermenu</span>, <span class="ruby-value str">&quot;Skip Solution\tCtl-K&quot;</span>).<span class="ruby-identifier">connect</span>(<span class="ruby-constant">SEL_COMMAND</span>, <span class="ruby-identifier">method</span>(<span class="ruby-identifier">:onCmdSkipSolution</span>))
+        <span class="ruby-constant">FXMenuTitle</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">menubar</span>, <span class="ruby-value str">&quot;&amp;Solver&quot;</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">solvermenu</span>)
+
+        <span class="ruby-comment cmt"># Manipulations Menu</span>
+        <span class="ruby-comment cmt">#manipmenu = FXMenuPane.new(self)</span>
+        <span class="ruby-comment cmt">#FXMenuTitle.new(menubar, &quot;&amp;Manipulations&quot;, nil, manipmenu)</span>
+
+        <span class="ruby-ivar">@current_r</span> = <span class="ruby-value">0</span>
+        <span class="ruby-ivar">@current_c</span> = <span class="ruby-value">0</span>
+        <span class="ruby-ivar">@running</span> = <span class="ruby-keyword kw">false</span>
+        <span class="ruby-ivar">@filename</span> = <span class="ruby-keyword kw">nil</span>
+
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;ARGV= #{ARGV.join(&quot;, &quot;)}&quot;</span>
+
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+            <span class="ruby-identifier">grid</span> = []
+            (<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">8</span>).<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">grid</span>.<span class="ruby-identifier">push</span>(<span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">9</span>, <span class="ruby-value">0</span>)) }
+            <span class="ruby-ivar">@initial_problem</span> = <span class="ruby-constant">Sudoku</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">grid</span>)
+            <span class="ruby-ivar">@solver</span> = <span class="ruby-constant">Solver</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@initial_problem</span>)
+            <span class="ruby-identifier">fillGrid</span>
+        <span class="ruby-keyword kw">else</span>
+            <span class="ruby-identifier">loadFile</span>(<span class="ruby-constant">ARGV</span>[<span class="ruby-value">0</span>])
+        <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

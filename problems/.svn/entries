@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="38"
+   name=""
+   committed-date="2006-01-08T04:47:36.302875Z"
+   url="svn://phoenix/svn/devel/sudoku/trunk/problems"
+   last-author="robert"
+   kind="dir"
+   uuid="7202a74c-ecf7-b744-bf85-fcfb75b31d25"
+   revision="62"/>
+<entry
+   committed-rev="63"
+   name="hard1.sdk"
+   text-time="2006-01-15T16:51:11.241203Z"
+   committed-date="2007-02-12T00:54:11.406250Z"
+   checksum="d99d739bb2c74c5dbb3c7538539b5aad"
+   last-author="robert"
+   kind="file"
+   revision="63"/>
+<entry
+   committed-rev="63"
+   name="web2"
+   text-time="2006-01-18T03:47:17.996900Z"
+   committed-date="2007-02-12T00:54:11.406250Z"
+   checksum="cf92faa77a915bd46a95c0511e736ddd"
+   last-author="robert"
+   kind="file"
+   revision="63"/>
+<entry
+   committed-rev="37"
+   name="dec05.sdk"
+   text-time="2006-01-06T07:32:23.413619Z"
+   committed-date="2006-01-07T16:55:42.484375Z"
+   checksum="1da413e38a3e6e32b27f615d2a7509b1"
+   last-author="robert"
+   kind="file"/>
+<entry
+   committed-rev="63"
+   name="dec05_A.sdk"
+   text-time="2006-01-07T23:22:08.585651Z"
+   committed-date="2007-02-12T00:54:11.406250Z"
+   checksum="80f58ade81bc6f4f7c1064a1b095489e"
+   last-author="robert"
+   kind="file"
+   revision="63"/>
+<entry
+   committed-rev="63"
+   name="web3"
+   text-time="2006-01-18T03:49:34.493172Z"
+   committed-date="2007-02-12T00:54:11.406250Z"
+   checksum="c8fa88aaa1a279bb9a2421360b6d2eb4"
+   last-author="robert"
+   kind="file"
+   revision="63"/>
+<entry
+   committed-rev="37"
+   name="hmpage.sdk"
+   text-time="2006-01-06T07:32:38.455248Z"
+   committed-date="2006-01-07T16:55:42.484375Z"
+   checksum="6fbd7979256c552071c4b8463afc9f61"
+   last-author="robert"
+   kind="file"/>
+<entry
+   committed-rev="63"
+   name="dec05_B.sdk"
+   text-time="2006-01-08T03:30:58.592542Z"
+   committed-date="2007-02-12T00:54:11.406250Z"
+   checksum="c4947362547737c66c69557e63949ca3"
+   last-author="robert"
+   kind="file"
+   revision="63"/>
+<entry
+   committed-rev="63"
+   name="web4"
+   text-time="2006-01-18T03:49:56.705112Z"
+   committed-date="2007-02-12T00:54:11.406250Z"
+   checksum="929ebab6a0f2b3432e0f0e628cf063f8"
+   last-author="robert"
+   kind="file"
+   revision="63"/>
+<entry
+   committed-rev="63"
+   name="dec05_C.sdk"
+   text-time="2006-01-08T03:39:11.351094Z"
+   committed-date="2007-02-12T00:54:11.406250Z"
+   checksum="2216e5f84301e25fff91446a74ff94a1"
+   last-author="robert"
+   kind="file"
+   revision="63"/>
+<entry
+   committed-rev="63"
+   name="web5"
+   text-time="2006-01-18T04:21:29.466769Z"
+   committed-date="2007-02-12T00:54:11.406250Z"
+   checksum="4b567e784efaa976c489f5b69c6627d4"
+   last-author="robert"
+   kind="file"
+   revision="63"/>
+<entry
+   committed-rev="38"
+   name="dec05_msol.sdk"
+   text-time="2006-01-08T04:09:40.841772Z"
+   committed-date="2006-01-08T04:47:36.302875Z"
+   checksum="dfcf6031a6b3fe85283a5030aaa14071"
+   last-author="robert"
+   kind="file"/>
+<entry
+   committed-rev="37"
+   name="exp.sdk"
+   text-time="2006-01-06T07:39:05.461736Z"
+   committed-date="2006-01-07T16:55:42.484375Z"
+   checksum="f95978298dee8b012ce97877219b7edf"
+   last-author="robert"
+   kind="file"/>
+<entry
+   committed-rev="37"
+   name="jan06.sdk"
+   text-time="2006-01-06T07:32:53.216473Z"
+   committed-date="2006-01-07T16:55:42.484375Z"
+   checksum="6b66a35f2fafba5c53fd0b415b8ba8af"
+   last-author="robert"
+   kind="file"/>
+<entry
+   committed-rev="63"
+   name="web1"
+   text-time="2006-01-18T03:46:20.193784Z"
+   committed-date="2007-02-12T00:54:11.406250Z"
+   checksum="34733390548d7ca701f9e20825b29623"
+   last-author="robert"
+   kind="file"
+   revision="63"/>
+</wc-entries>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>show_problem (sudoku.rb)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File sudoku.rb, line 386</span>
+<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show_problem</span>(<span class="ruby-identifier">p</span>)
+    <span class="ruby-identifier">puts</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-identifier">p</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;initial problem + #{p.steps.join(&quot; + &quot;)}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;max_poss         : #{p.max_poss}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;min_depth        : #{p.min_depth}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;degree_of_freedom: #{p.dof}&quot;</span>
+    <span class="ruby-identifier">p</span>.<span class="ruby-identifier">each_poss</span>(<span class="ruby-identifier">p</span>.<span class="ruby-identifier">min_depth</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">poss</span><span class="ruby-operator">|</span> <span class="ruby-identifier">puts</span> <span class="ruby-identifier">poss</span> }
+    <span class="ruby-identifier">puts</span>
+<span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

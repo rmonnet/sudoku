@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>analyze (Sudoku)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File sudoku.rb, line 377</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">analyze</span>
+        <span class="ruby-identifier">res</span> = <span class="ruby-value str">&quot;\n&quot;</span>
+        <span class="ruby-identifier">res</span> <span class="ruby-operator">+=</span><span class="ruby-value str">&quot;poss:\n&quot;</span>
+        <span class="ruby-ivar">@poss</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">res</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;  #{p}\n&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-ivar">@rows</span>.<span class="ruby-identifier">each_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">res</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;row##{r}: [#{@rows[r].to_a.sort.join(&quot;, &quot;)}]\n&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-ivar">@cols</span>.<span class="ruby-identifier">each_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">res</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;col##{c}: [#{@cols[c].to_a.sort.join(&quot;, &quot;)}]\n&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-ivar">@box</span>.<span class="ruby-identifier">each_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">subrow</span> = <span class="ruby-ivar">@box</span>[<span class="ruby-identifier">r</span>]
+            <span class="ruby-identifier">subrow</span>.<span class="ruby-identifier">each_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">res</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;box##{r}-#{c}: [#{subrow[c].to_a.sort.join(&quot;, &quot;)}]\n&quot;</span>
+            <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">res</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

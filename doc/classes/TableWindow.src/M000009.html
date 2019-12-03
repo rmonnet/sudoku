@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>fillGrid (TableWindow)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File table.rb, line 203</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fillGrid</span>
+        <span class="ruby-identifier">grid</span> = <span class="ruby-ivar">@solver</span>.<span class="ruby-identifier">best_problem</span>.<span class="ruby-identifier">grid</span>
+        (<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">8</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+            (<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">8</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">v</span> = <span class="ruby-identifier">grid</span>[<span class="ruby-identifier">r</span>,<span class="ruby-identifier">c</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{grid[r,c]}&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;&quot;</span>
+                <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">setItemText</span>(<span class="ruby-identifier">r</span>, <span class="ruby-identifier">c</span>, <span class="ruby-identifier">v</span>)
+                <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">setItemJustify</span>(<span class="ruby-identifier">r</span>, <span class="ruby-identifier">c</span>, <span class="ruby-constant">FXTableItem</span><span class="ruby-operator">::</span><span class="ruby-constant">CENTER_X</span> <span class="ruby-operator">|</span> <span class="ruby-constant">FXTableItem</span><span class="ruby-operator">::</span><span class="ruby-constant">CENTER_Y</span>)
+            <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-comment cmt">#@statusline.normalText = @solver.status</span>
+        <span class="ruby-ivar">@statusField</span>.<span class="ruby-identifier">text</span> = <span class="ruby-ivar">@solver</span>.<span class="ruby-identifier">status</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>solve (sudoku.rb)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File sudoku.rb, line 402</span>
+<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solve</span>(<span class="ruby-identifier">p</span>, <span class="ruby-identifier">debug</span>=<span class="ruby-keyword kw">false</span>)
+
+    <span class="ruby-identifier">t0</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+
+    <span class="ruby-identifier">pb_list</span> = [<span class="ruby-identifier">p</span>]
+    <span class="ruby-identifier">nb_try</span> = <span class="ruby-value">0</span>
+    <span class="ruby-identifier">nb_dup</span> = <span class="ruby-value">0</span>
+    <span class="ruby-identifier">nb_discard</span> = <span class="ruby-value">0</span>
+    <span class="ruby-identifier">it</span> = <span class="ruby-value">1</span>
+
+    <span class="ruby-keyword kw">while</span> (<span class="ruby-keyword kw">not</span> <span class="ruby-identifier">pb_list</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-keyword kw">not</span> <span class="ruby-identifier">pb_list</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">complete?</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-identifier">it</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2000</span>)
+
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;+++iteration #{it}+++&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">debug</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;nb problems = #{pb_list.length}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">debug</span>
+
+        <span class="ruby-identifier">best_pb</span> = <span class="ruby-identifier">pb_list</span>.<span class="ruby-identifier">shift</span>
+
+        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;best problem:&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">debug</span>
+        <span class="ruby-identifier">show_problem</span>(<span class="ruby-identifier">best_pb</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">debug</span>
+
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">best_pb</span>.<span class="ruby-identifier">min_depth</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span>
+
+            <span class="ruby-comment cmt"># we can create a problem with all the steps included at once</span>
+            <span class="ruby-identifier">new_steps</span> = []
+            <span class="ruby-identifier">best_pb</span>.<span class="ruby-identifier">each_poss</span>(<span class="ruby-value">1</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">poss</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">new_steps</span>.<span class="ruby-identifier">push</span>(<span class="ruby-constant">Step</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">poss</span>.<span class="ruby-identifier">row</span>, <span class="ruby-identifier">poss</span>.<span class="ruby-identifier">col</span>, <span class="ruby-identifier">poss</span>.<span class="ruby-identifier">first</span>))
+            <span class="ruby-keyword kw">end</span>
+            <span class="ruby-identifier">nb_try</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+            <span class="ruby-keyword kw">begin</span>
+                <span class="ruby-identifier">child</span> = <span class="ruby-constant">Sudoku</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">best_pb</span>.<span class="ruby-identifier">grid</span>, <span class="ruby-identifier">best_pb</span>.<span class="ruby-identifier">steps</span>, <span class="ruby-identifier">new_steps</span>)
+                <span class="ruby-comment cmt">#if the new problem is a dead-end, discard it</span>
+                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">child</span>.<span class="ruby-identifier">max_poss</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">child</span>.<span class="ruby-identifier">complete?</span> <span class="ruby-keyword kw">then</span>
+                    <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No solution possible for best problem, discard it&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">debug</span>
+                    <span class="ruby-identifier">nb_discard</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+                <span class="ruby-comment cmt">#avoid duplicates</span>
+                <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">pb_list</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">child</span>)
+                    <span class="ruby-identifier">nb_dup</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+                <span class="ruby-keyword kw">else</span>
+                    <span class="ruby-identifier">pb_list</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">child</span>)
+                <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">RuntimeError</span>
+                <span class="ruby-comment cmt"># the combination of depth=1 solution caused a conflict</span>
+                <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Impossible solution for best problem, discard it&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">debug</span>
+                <span class="ruby-identifier">nb_discard</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+            <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">else</span>
+
+            <span class="ruby-comment cmt"># we need to create a new problem for each possibility</span>
+            <span class="ruby-identifier">best_pb</span>.<span class="ruby-identifier">each_poss</span>(<span class="ruby-identifier">best_pb</span>.<span class="ruby-identifier">min_depth</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">poss</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">poss</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+                    <span class="ruby-identifier">nb_try</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+                    <span class="ruby-identifier">new_steps</span> = [<span class="ruby-constant">Step</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">poss</span>.<span class="ruby-identifier">row</span>, <span class="ruby-identifier">poss</span>.<span class="ruby-identifier">col</span>, <span class="ruby-identifier">v</span>)]
+                    <span class="ruby-identifier">child</span> = <span class="ruby-constant">Sudoku</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">best_pb</span>.<span class="ruby-identifier">grid</span>, <span class="ruby-identifier">best_pb</span>.<span class="ruby-identifier">steps</span>, <span class="ruby-identifier">new_steps</span>)
+                    <span class="ruby-comment cmt">#if the new problem is a dead-end, discard it</span>
+                    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">child</span>.<span class="ruby-identifier">max_poss</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">child</span>.<span class="ruby-identifier">complete?</span> <span class="ruby-keyword kw">then</span>
+                        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No solution possible for best problem, discard it&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">debug</span>
+                        <span class="ruby-identifier">nb_discard</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+                    <span class="ruby-comment cmt">#avoid duplicates</span>
+                    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">pb_list</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">child</span>)
+                        <span class="ruby-identifier">nb_dup</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+                    <span class="ruby-keyword kw">else</span>
+                        <span class="ruby-identifier">pb_list</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">child</span>)
+                    <span class="ruby-keyword kw">end</span>
+                <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-comment cmt"># resort the list by max_poss / min_dof</span>
+        <span class="ruby-identifier">pb_list</span>.<span class="ruby-identifier">sort!</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span>,<span class="ruby-identifier">y</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">res</span> = <span class="ruby-identifier">x</span>.<span class="ruby-identifier">max_poss</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">y</span>.<span class="ruby-identifier">max_poss</span>
+            <span class="ruby-identifier">res</span> = <span class="ruby-identifier">x</span>.<span class="ruby-identifier">dof</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">y</span>.<span class="ruby-identifier">dof</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">res</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+            <span class="ruby-identifier">res</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">it</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">duration</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">t0</span>
+
+    <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;initial problem is&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-identifier">p</span>
+
+    <span class="ruby-keyword kw">if</span> (<span class="ruby-keyword kw">not</span> <span class="ruby-identifier">pb_list</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">pb_list</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">complete?</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;solution is&quot;</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-identifier">pb_list</span>[<span class="ruby-value">0</span>]
+    <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;no solution found&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;initial dof           = #{p.dof}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;max possibilities     = #{p.max_poss}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;nb iterations         = #{it}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;nb problems computed  = #{nb_try}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;nb duplicates         = #{nb_dup}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;nb problems discarded = #{nb_discard}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;computed in             #{duration} sec&quot;</span>
+<span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

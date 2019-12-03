@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: sudoku.rb</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>sudoku.rb</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>sudoku.rb
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Sat Jan 07 21:49:06 Central Standard Time 2006</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>An algorithm to solve <a href="../classes/Sudoku.html">Sudoku</a> problems</h1>
+<p>
+version 1.0
+</p>
+<p>
+@copyright 2005 Robert Monnet
+</p>
+<p>
+This algorithm attempts to solve <a
+href="../classes/Sudoku.html">Sudoku</a> problems efficiently, that is with
+the smallest number of attempts.
+</p>
+<p>
+More details about <a href="../classes/Sudoku.html">Sudoku</a> can be found
+at <a href="http://www.sudoku.com">www.sudoku.com</a>
+</p>
+<h2>The Game</h2>
+<p>
+<a href="../classes/Sudoku.html">Sudoku</a> is played with a 9x9 grid. Each
+grid location contains a number between 1 and 9. At the beginning of the
+game a partially filled-in grid is provided. The goal is to complete the
+grid such that:
+</p>
+<ul>
+<li>each row contains all numbers 1 to 9
+
+</li>
+<li>each column contains all numbers 1 to 9
+
+</li>
+<li>each 3x3 sub-grid contains all numbers 1 to 9
+
+</li>
+</ul>
+<p>
+The following example shows a <a href="../classes/Sudoku.html">Sudoku</a>
+problem:
+</p>
+<pre>
+  . . .  2 . 9  . . .
+  5 . .  . . .  . . 3
+  2 8 .  . 6 .  . 1 5
+
+  . 1 2  . . .  3 8 .
+  . 5 .  7 . 1  . 6 .
+  . 6 3  . . .  5 7 .
+
+  4 2 .  . 1 .  . 5 9
+  6 . .  . . .  . . 7
+  . . .  5 . 7  . . .
+</pre>
+<p>
+and the solution for this is:
+</p>
+<pre>
+  3 7 1  2 5 9  6 4 8
+  5 4 6  1 7 8  2 9 3
+  2 8 9  4 6 3  7 1 5
+
+  7 1 2  6 9 5  3 8 4
+  8 5 4  7 3 1  9 6 2
+  9 6 3  8 4 2  5 7 1
+
+  4 2 7  3 1 6  8 5 9
+  6 3 5  9 8 4  1 2 7
+  1 9 8  5 2 7  4 3 6
+</pre>
+<h2>The Algorithm</h2>
+<h3>Definitions</h3>
+<p>
+before we describe algorithms to solve the <a
+href="../classes/Sudoku.html">Sudoku</a> problem we need to define some
+vocabulary:
+</p>
+<table>
+<tr><td valign="top"><a href="../classes/Grid.html">Grid</a>:</td><td>The 9x9 matrix which contains the numbers from 1 to 9
+
+</td></tr>
+<tr><td valign="top">Location:</td><td>A point on the <a href="../classes/Grid.html">Grid</a> defined by its
+coordinates (row,col) and its value. If the location already contained a
+number it is said to be <em>defined</em>, <em>undefined</em> otherwise
+
+</td></tr>
+<tr><td valign="top">Box:</td><td>A 3x3 sub-grid, they are also defined by theirs coordinates (row,col).
+
+</td></tr>
+<tr><td valign="top">Possibility:</td><td>The set of all possible valid value that an undefined location can take.
+This is represented by an instance of the <a
+href="../classes/Poss.html">Poss</a> class. It contains the location
+coordinate and the set of valid possible values
+
+</td></tr>
+<tr><td valign="top">Depth:</td><td>This is used to designate the number of values in a Possibility. A Depth of
+1 means that only one new Problem can be derived from the current one if
+this location is populated.
+
+</td></tr>
+<tr><td valign="top"><a href="../classes/Step.html">Step</a>:</td><td>A <a href="../classes/Step.html">Step</a> is the action of creating a new
+problem from a <em>parent</em> problem by setting the value of an undefined
+location. A Solution is obtained from an original problem and a set of
+steps. A <a href="../classes/Step.html">Step</a> is represented by an
+instance of the class <a href="../classes/Step.html">Step</a>
+
+</td></tr>
+<tr><td valign="top">Degree Of Freedom:</td><td>This is a measure of how many <em>undefined</em> locations are contained in
+a problem.
+
+</td></tr>
+<tr><td valign="top">Complete Problem:</td><td>A problem is said to be complete if all locations are <em>defined</em>.
+
+</td></tr>
+</table>
+<h3>Algorithm</h3>
+<p>
+The Algorithm used is as follow:
+</p>
+<ul>
+<li>start with a priority queue seeded with the initial problem
+
+</li>
+<li>The priority queue is sorted by ascending max_poss then ascending degree of
+freedom such that the top of the queue contains the possibilities with the
+minimum depth.
+
+</li>
+<li>If at least one possibility of depth 1 exists, then all the depth 1
+possibilities are used at once to derive a new child problem.
+
+</li>
+<li>If the minimum depth is greater than 1, then each possible problem derived
+from the min depth possibilities is generated and pushed on the queue.
+
+</li>
+<li>If the problem at the top of the queue is not complete (does not have any
+possibility) or is impossible (location conflict), discard it
+
+</li>
+<li>Continue until a solution is found (<em>complete</em> problem) or the
+maximum number of iteration has been reached.
+
+</li>
+</ul>
+<h3>Performances</h3>
+<p>
+So how does this algorithm perform?. On the few examples of problems I
+have, it can find a solution in less iterations than the initial problem
+&quot;degree of freedom&quot;.
+</p>
+<h3>Limitations</h3>
+<p>
+This algorithm find only one solution if several exists. Also it does not
+help generate problems in the first place. The <a
+href="http://www.sudoku.com">Sudoku web site</a> claims that all its
+problems only have one solution. It would be interested to modify this
+algorithm to find all the solutions for a particular problem.
+</p>
+
+    </div>
+
+    <div id="requires-list">
+      <h3 class="section-bar">Required files</h3>
+
+      <div class="name-list">
+      set&nbsp;&nbsp;
+      </div>
+    </div>
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

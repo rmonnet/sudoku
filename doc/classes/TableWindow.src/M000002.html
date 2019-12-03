@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>onCmdSetAsProblem (TableWindow)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File table.rb, line 137</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">onCmdSetAsProblem</span>(<span class="ruby-identifier">sender</span>, <span class="ruby-identifier">sel</span>, <span class="ruby-identifier">ptr</span>)
+        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@running</span>
+        <span class="ruby-identifier">new_grid</span> = []
+        (<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">8</span>).<span class="ruby-identifier">step</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">new_row</span> = []
+            (<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">8</span>).<span class="ruby-identifier">step</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">v</span> = <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">getItemText</span>(<span class="ruby-identifier">r</span>, <span class="ruby-identifier">c</span>).<span class="ruby-identifier">to_i</span>
+                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">v</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">9</span> <span class="ruby-keyword kw">then</span>
+                    <span class="ruby-identifier">new_row</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">v</span>)
+                <span class="ruby-keyword kw">else</span>
+                    <span class="ruby-identifier">new_row</span>.<span class="ruby-identifier">push</span>(<span class="ruby-value">0</span>)
+                <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">end</span>
+            <span class="ruby-identifier">new_grid</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">new_row</span>)
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-ivar">@initial_problem</span> = <span class="ruby-constant">Sudoku</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">new_grid</span>)
+        <span class="ruby-ivar">@solver</span>= <span class="ruby-constant">Solver</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@initial_problem</span>)
+        <span class="ruby-identifier">fillGrid</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
